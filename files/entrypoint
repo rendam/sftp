@@ -57,6 +57,8 @@ if [ ! -f "$userConfFinalPath" ]; then
     if [ -f "$userConfFinalPath" ] && [ "$(wc -l < "$userConfFinalPath")" -gt 0 ]; then
         # Import users from final conf file
         while IFS= read -r user || [[ -n "$user" ]]; do
+            # remove trailing line breaks in lines
+            user=$(echo $user | tr -d '\n' | tr -d '\r')
             create-sftp-user "$user"
         done < "$userConfFinalPath"
     elif $startSshd; then
